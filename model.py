@@ -12,7 +12,7 @@ class SummaRuNNer(object):
         self.hidden_size = 120
         self.doc_len = 90
         with tf.variable_scope('inputs'):
-            self.x = tf.placeholder(tf.int32, shape=[self.doc_len, self.sent_len])
+            self.x = tf.placeholder(tf.int32, shape=[self.doc_len, self.sent_len], name = "x_input")
             self.y = tf.placeholder(tf.float32, shape=[self.doc_len])
             self.sequence_length = tf.reduce_sum(tf.sign(self.x), axis = 1)
             self.doc_length = tf.reduce_sum(tf.sign(self.sequence_length), axis = 0)
@@ -96,7 +96,7 @@ class SummaRuNNer(object):
                 Prob = tf.sigmoid(content + salience + novelty + position + bias)
                 s = s + tf.matmul(h, Prob)
                 scores.append(Prob)
-            self.y_ = tf.stack(scores, axis=0)
+            self.y_ = tf.stack(scores, axis=0, name = "prediction")
 
         # CalculateMean cross-entropy loss
         with tf.name_scope("loss"):
