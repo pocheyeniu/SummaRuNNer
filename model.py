@@ -79,7 +79,7 @@ class SummaRuNNer(object):
             scores = []
             #init = tf.global_variables_initializer()
             #sess.run(init)
-            print ("sent_outputs:",sent_outputs)
+            #print ("sent_outputs:",sent_outputs)
         with tf.variable_scope("score_layer"):
 
             for position, sent_hidden in enumerate(tf.unstack(sent_outputs, axis = 0)):
@@ -95,8 +95,8 @@ class SummaRuNNer(object):
 
                 Prob = tf.sigmoid(content + salience + novelty + position + bias)
                 s = s + tf.matmul(h, Prob)
-                scores.append(Prob)
-            self.y_ = tf.stack(scores, axis=0, name = "prediction")
+                scores.append(Prob[0][0])
+            self.y_ = tf.convert_to_tensor(scores, name = "prediction")
 
         # CalculateMean cross-entropy loss
         with tf.name_scope("loss"):
@@ -104,5 +104,5 @@ class SummaRuNNer(object):
             epsilon = 1e-8
             target = self.y[:self.doc_length]
             output = self.y_[:self.doc_length]
-            self.loss = tf.reduce_mean(tf.reduce_sum(-(target * tf.log(output + epsilon) + (1. - target) * tf.log(1. - output + epsilon)), axis=1))
+            self.loss = tf.reduce_mean(-(target * tf.log(output + epsilon) + (1. - target) * tf.log(1. - output + epsilon)), axis=0)
 

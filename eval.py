@@ -24,7 +24,7 @@ parser.add_argument('--sen_len', type=int, default=40)
 parser.add_argument('--doc_len', type=int, default=90)
 parser.add_argument('--train_file', type=str, default='./data/split_90/')
 parser.add_argument('--validation_file', type=str, default='./data/split_90/valid')
-parser.add_argument('--model_dir', type=str, default='./runs/1528870032/checkpoints/')
+parser.add_argument('--model_dir', type=str, default='./runs/1532436443/checkpoints/')
 parser.add_argument('--epochs', type=int, default=15)
 parser.add_argument('--hidden', type=int, default=110)
 parser.add_argument('--lr', type=float, default=1e-4)
@@ -61,8 +61,8 @@ with graph.as_default():
             global_step = tf.Variable(0, dtype=tf.int32, name='global_step')
         '''
         #saver = tf.train.Saver()
-        saver = tf.train.import_meta_graph('./runs/1531124200/checkpoints/model-1024.meta')
-        module_file = tf.train.latest_checkpoint("./runs/1531124200/" + 'checkpoints/')
+        saver = tf.train.import_meta_graph('./runs/1532436443/checkpoints/model-2560.meta')
+        module_file = tf.train.latest_checkpoint("./runs/1532436443/" + 'checkpoints/')
         saver.restore(sess, module_file)
         #saver.restore(sess, FLAGS.load_model)
         #print('Loaded model from', FLAGS.load_model, 'saved at global step', global_step.eval())
@@ -98,19 +98,14 @@ with graph.as_default():
             x = x[:, :max_len]
             target = y
             output = y_
-            epsilon = 1e-8
-            loss = tf.reduce_mean(tf.reduce_sum(-(target * tf.log(output + epsilon) + (1. - target) * tf.log(1. - output + epsilon)), axis=1)).eval()
-            print loss
-            loss_sum += loss
-            #y_ = sess.run(Summa.y_, feed_dict = {Summa.x: x, Summa.y:y}
+            
             for score in y_:
+                print score
                 #print(type(score.float))
                 #score = score.float
-                f.write(str(score[0][0]))
+                f.write(str(score))
                 f.write(" ")
                 jk += 1
                 #print("jk:", jk)
             f.write("\n")
         f.close()
-        loss_mean = loss_sum * 1.0/ test_reader.length 
-        print ("llll", loss_mean)
