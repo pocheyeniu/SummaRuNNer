@@ -28,8 +28,6 @@ class SummaRuNNer(object):
             self.result = []
             self.loca_out = self.outputs_1[:self.doc_length, :,:]
             self.input_unstack = tf.unstack(self.outputs_1, axis = 0)
-            #self.input_unstack = self.input_unstack_src[:self.doc_length]
-            #print ("poa1:", self.input_unstack)
             for index, data in enumerate(self.input_unstack):
                 self.avg_pooling = tf.cond(tf.equal(self.sequence_length[index], 0), lambda:tf.reduce_mean(data, axis = 0), lambda:tf.reduce_mean(data[:self.sequence_length[index], :], axis = 0))
                 self.result.append(self.avg_pooling)
@@ -47,8 +45,6 @@ class SummaRuNNer(object):
                 avg_pooling = tf.reduce_mean(data[:self.doc_length, :], axis = 0)
                 self.result_2.append(avg_pooling)
             self.outputs_3 = tf.stack(self.result_2)
-            #classifier
-
             #dense layers 
             Wf0 = tf.Variable(tf.random_uniform([2*self.hidden_size, 100], -1.0, 1.0), name='W0')
             bf0 = tf.Variable(tf.zeros(shape=[100]), name='b0')
@@ -59,27 +55,15 @@ class SummaRuNNer(object):
             #dense layers 
             Wf = tf.Variable(tf.random_uniform([2*self.hidden_size, 100], -1.0, 1.0), name='W')
             bf = tf.Variable(tf.zeros(shape=[100]), name='b')
-            #y = tf.nn.relu(tf.matmul(inputs, W) + b)
-            #s = tf.zeros(shape=(100, 1), dtype=tf.float64)
             s = tf.Variable(tf.zeros(shape=(100, 1), dtype=tf.float32))
             Wc = tf.Variable(tf.random_normal([1, 100]))
             Ws = tf.Variable(tf.random_normal([100, 100]))
             Wr = tf.Variable(tf.random_normal([100, 100]))
             Wp = tf.Variable(tf.random_normal([1, self.sent_len]))
-            #bias = tf.Variable(tf.zeros([1]), name="biases")
             bias = tf.Variable(tf.random_normal([1]), name="biases")
-            #b_c = tf.constant([1],dtype=tf.float32)
-            #doc = torch.transpose(self.tanh(self.fc1(doc_features)), 0, 1)
             self.doc = tf.transpose(self.f_outputs, perm = (1, 0))
-            #sent_outputs = sent_outputs.view(-1, 2 * self.sent_GRU_hidden_units)
             sent_outputs = tf.reshape(self.outputs_2, (-1, 2 * self.hidden_size))
-            #print ("sent_outputs", sent_outputs)
-            #print("sent_outputs_eval", sent_outputs.eval())
-            #print (tf.split(sent_outputs,  self.doc_len, 0 ))
             scores = []
-            #init = tf.global_variables_initializer()
-            #sess.run(init)
-            #print ("sent_outputs:",sent_outputs)
         with tf.variable_scope("score_layer"):
 
             for position, sent_hidden in enumerate(tf.unstack(sent_outputs, axis = 0)):
