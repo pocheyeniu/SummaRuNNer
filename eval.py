@@ -54,19 +54,9 @@ with graph.as_default():
       log_device_placement=FLAGS.log_device_placement)
     sess = tf.Session(config=session_conf)
     with sess.as_default():
-        # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
-        '''
-        with tf.variable_scope("Model"):
-            #m = build_model(word_vocab)
-            global_step = tf.Variable(0, dtype=tf.int32, name='global_step')
-        '''
-        #saver = tf.train.Saver()
         saver = tf.train.import_meta_graph('./runs/1532436443/checkpoints/model-2560.meta')
         module_file = tf.train.latest_checkpoint("./runs/1532436443/" + 'checkpoints/')
         saver.restore(sess, module_file)
-        #saver.restore(sess, FLAGS.load_model)
-        #print('Loaded model from', FLAGS.load_model, 'saved at global step', global_step.eval())
-
         input_x =  graph.get_operation_by_name("inputs/x_input").outputs[0]
         predict =  graph.get_operation_by_name("score_layer/prediction").outputs[0]
         f = codecs.open(args.model_dir+"/scores" , "w", "utf-8")
