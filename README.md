@@ -4,9 +4,10 @@ Tensorflow implementation  of SummaRuNNer
 the version of Tensorflow is 1.2.0
 
 Usage:
-   the data(train, test, valid) directory contains many docs, each line in the doc is label(0 or not important, 1 for important) and sentence(for Chinese, they are segmented words), label and sentence is splited by '\t'.
+   Now data & w2v model is provided, you can use them to train a model directly, then you should change the model directory to your trained model position for evaluation.
    
-   You also need an Word2vec model instead.
+Data & w2v model:
+   链接: https://pan.baidu.com/s/1AVwjhBTkkbpUMgo7DAg73w 提取码: ywf5  
 
 Reference:
    hpzhao 's PyTorch implementation of SummaRuNNer
