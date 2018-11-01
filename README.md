@@ -8,7 +8,8 @@ Usage:
    
 Data & w2v model:
    链接: https://pan.baidu.com/s/1AVwjhBTkkbpUMgo7DAg73w 提取码: ywf5  
-
+   Google: https://drive.google.com/drive/folders/1Ym2BcE2MBkxfPYWOfzwbrhpJo51OgFlJ?usp=sharing
+   
 Reference:
    hpzhao 's PyTorch implementation of SummaRuNNer
    https://github.com/hpzhao/SummaRuNNer
